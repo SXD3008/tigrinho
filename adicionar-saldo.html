@@ -40,7 +40,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            flex: 1 1 calc(33.33% - 10px); /* Ajusta o tamanho dos botões */
+            flex: 1 1 calc(33.33% - 10px);
             text-align: center;
             font-size: 16px;
             display: flex;
@@ -167,7 +167,7 @@
             let valorFinal = valor;
             let bonus = 0;
 
-            if (valor > 499) {
+            if (valor > 500) {
                 bonus = valor * 0.25; // Calcula 25% de bônus
                 valorFinal += bonus;
                 bonusText.style.display = "block"; // Mostra o aviso de bônus
@@ -175,10 +175,8 @@
                 bonusText.style.display = "none"; // Esconde o aviso se o valor for menor
             }
 
-            const valorFormatado = valorFinal.toFixed(2).replace('.', ',') + " R$";
-
-            receberElement.textContent = valorFormatado;
-            confirmarValor.textContent = valorFormatado;
+            animateNumber(receberElement, parseFloat(receberElement.textContent.replace(',', '.')), valorFinal);
+            animateNumber(confirmarValor, parseFloat(confirmarValor.textContent.replace(',', '.')), valorFinal);
         }
 
         function confirmarPagamento() {
@@ -201,6 +199,22 @@
 
             alert(`Pagamento confirmado! Seu novo saldo é: ${saldoAtual.toFixed(2).replace('.', ',')} R$`);
             window.location.href = "index.html";
+        }
+
+        function animateNumber(element, from, to, duration = 500) {
+            const range = to - from;
+            const stepTime = Math.abs(Math.floor(duration / range));
+            let current = from;
+            const increment = to > from ? 1 : -1;
+
+            const timer = setInterval(() => {
+                current += increment;
+                element.textContent = current.toFixed(2).replace('.', ',') + " R$";
+
+                if ((increment > 0 && current >= to) || (increment < 0 && current <= to)) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
         }
 
         // Atualiza o valor automaticamente ao preencher o campo personalizado
