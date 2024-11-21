@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo Crash (Estático)</title>
+    <title>Jogo Crash</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
@@ -84,29 +84,93 @@
     <div class="container">
         <div class="left-panel">
             <div>
-                <div class="button-group">
-                    <button class="active">Normal</button>
-                    <button>Auto</button>
+                <div class="input-group">
+                    <input type="number" id="betAmount" placeholder="Quantidade">
+                    <input type="number" id="betValue" placeholder="R$">
                 </div>
                 <div class="input-group">
-                    <input type="text" placeholder="Quantidade">
-                    <input type="text" placeholder="R$">
+                    <input type="number" id="autoCashout" placeholder="Auto Retirar (Multiplier)">
                 </div>
-                <button>Auto Retirar</button>
             </div>
-            <button class="start-button">Começar o jogo</button>
+            <button class="start-button" id="startGame">Começar o jogo</button>
+            <button class="start-button" id="cashOut" disabled>Retirar</button>
         </div>
         <div class="right-panel">
             <div class="game-display">
-                <div class="multiplier">1.00X</div>
+                <div class="multiplier" id="multiplierDisplay">1.00X</div>
             </div>
-            <div class="previous-results">
-                <div class="result">1.23X</div>
-                <div class="result green">2.34X</div>
-                <div class="result">1.12X</div>
-                <div class="result green">4.56X</div>
+            <div class="previous-results" id="previousResults">
+                <!-- Resultados do jogo -->
             </div>
         </div>
     </div>
+
+    <script>
+        let isGameRunning = false;
+        let currentMultiplier = 1.0;
+        let crashPoint = Math.random() * 5 + 1; // Ponto de crash aleatório entre 1 e 6
+        let interval;
+
+        // Elementos do DOM
+        const multiplierDisplay = document.getElementById('multiplierDisplay');
+        const startGameButton = document.getElementById('startGame');
+        const cashOutButton = document.getElementById('cashOut');
+        const previousResults = document.getElementById('previousResults');
+        const autoCashoutInput = document.getElementById('autoCashout');
+
+        // Função para iniciar o jogo
+        startGameButton.addEventListener('click', () => {
+            if (isGameRunning) return;
+
+            isGameRunning = true;
+            currentMultiplier = 1.0;
+            crashPoint = Math.random() * 5 + 1; // Define novo ponto de crash
+            multiplierDisplay.textContent = "1.00X";
+            cashOutButton.disabled = false;
+
+            interval = setInterval(() => {
+                currentMultiplier += 0.01;
+                multiplierDisplay.textContent = currentMultiplier.toFixed(2) + 'X';
+
+                // Verifica se atingiu o ponto de crash
+                if (currentMultiplier >= crashPoint) {
+                    endGame(false); // Perdeu
+                }
+
+                // Verifica se o Auto Retirar foi definido e alcançado
+                const autoCashout = parseFloat(autoCashoutInput.value);
+                if (autoCashout && currentMultiplier >= autoCashout) {
+                    cashOut();
+                }
+            }, 50);
+        });
+
+        // Função para encerrar o jogo
+        function endGame(isWin) {
+            clearInterval(interval);
+            isGameRunning = false;
+            cashOutButton.disabled = true;
+
+            const resultDiv = document.createElement('div');
+            resultDiv.classList.add('result');
+            resultDiv.textContent = currentMultiplier.toFixed(2) + 'X';
+            if (isWin) {
+                resultDiv.classList.add('green');
+            }
+            previousResults.insertBefore(resultDiv, previousResults.firstChild);
+
+            if (!isWin) {
+                multiplierDisplay.textContent = 'Crash!';
+            }
+        }
+
+        // Função para retirar
+        cashOutButton.addEventListener('click', cashOut);
+
+        function cashOut() {
+            if (!isGameRunning) return;
+            endGame(true);
+        }
+    </script>
 </body>
 </html>
