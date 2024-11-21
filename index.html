@@ -1,27 +1,174 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roleta de Apostas</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Game Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .left-panel, .right-panel {
+            padding: 20px;
+        }
+        .left-panel {
+            width: 30%;
+            background-color: #2a2a3e;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .right-panel {
+            width: 70%;
+            background-color: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .button-group button {
+            width: 48%;
+            padding: 10px;
+            background-color: #333;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+        .button-group button.active {
+            background-color: #444;
+        }
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .input-group input, .input-group button {
+            width: 48%;
+            padding: 10px;
+            background-color: #333;
+            border: none;
+            color: #fff;
+        }
+        .input-group input {
+            text-align: center;
+        }
+        .start-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff4d4d;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .bottom-icons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .bottom-icons i {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .game-display {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #2a2a3e;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .game-display .multiplier {
+            font-size: 48px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .game-display .online-status {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .game-display .online-status .dot {
+            width: 10px;
+            height: 10px;
+            background-color: #00ff00;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .previous-results {
+            display: flex;
+            justify-content: space-between;
+        }
+        .previous-results .result {
+            width: 14%;
+            padding: 10px;
+            background-color: #333;
+            text-align: center;
+            border-radius: 5px;
+        }
+        .previous-results .result.green {
+            background-color: #00ff00;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Roleta de Apostas</h1>
-        <div class="roulette">
-            <div class="wheel">
-                <!-- Simbolos da roleta -->
-                <div class="symbol">🔪</div>
-                <div class="symbol">⭐</div>
-                <div class="symbol">🔪</div>
-                <div class="symbol">⭐</div>
-                <div class="symbol">🔪</div>
+        <div class="left-panel">
+            <div>
+                <div class="button-group">
+                    <button class="active">Normal</button>
+                    <button>Auto</button>
+                </div>
+                <div class="input-group">
+                    <input type="text" placeholder="Quantidade">
+                    <input type="text" placeholder="R$">
+                </div>
+                <div class="input-group">
+                    <button>½</button>
+                    <button>2x</button>
+                </div>
+                <div class="input-group">
+                    <button>Auto Retirar (Multiplier)</button>
+                    <button>Clear</button>
+                </div>
+            </div>
+            <button class="start-button">Começar o jogo</button>
+            <div class="bottom-icons">
+                <i class="fas fa-expand"></i>
+                <i class="fas fa-info-circle"></i>
             </div>
         </div>
-        <button id="spin">Girar</button>
-        <p id="result"></p>
+        <div class="right-panel">
+            <div class="game-display">
+                <div class="multiplier">1,00X</div>
+                <div class="online-status">
+                    <div class="dot"></div>
+                    <span>Online</span>
+                </div>
+            </div>
+            <div class="previous-results">
+                <div class="result green">2,30X</div>
+                <div class="result">1,74X</div>
+                <div class="result">1,11X</div>
+                <div class="result">19,92X</div>
+                <div class="result">1,30X</div>
+                <div class="result">1,14X</div>
+                <div class="result green">3,00X</div>
+                <div class="result green">4,97X</div>
+            </div>
+        </div>
     </div>
-    <script src="script.js"></script>
 </body>
 </html>
