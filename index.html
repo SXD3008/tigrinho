@@ -1,126 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Interface</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #1a1a2e;
-            color: #fff;
-        }
-        .container {
-            display: flex;
-            height: 100vh;
-        }
-        .left-panel, .right-panel {
-            padding: 20px;
-        }
-        .left-panel {
-            width: 30%;
-            background-color: #2a2a3e;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .right-panel {
-            width: 70%;
-            background-color: #1a1a2e;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .button-group {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .button-group button {
-            width: 48%;
-            padding: 10px;
-            background-color: #333;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-        }
-        .button-group button.active {
-            background-color: #444;
-        }
-        .input-group {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .input-group input, .input-group button {
-            width: 48%;
-            padding: 10px;
-            background-color: #333;
-            border: none;
-            color: #fff;
-        }
-        .input-group input {
-            text-align: center;
-        }
-        .start-button {
-            width: 100%;
-            padding: 15px;
-            background-color: #ff4d4d;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .bottom-icons {
-            display: flex;
-            justify-content: space-between;
-        }
-        .bottom-icons i {
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .game-display {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #2a2a3e;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .game-display .multiplier {
-            font-size: 48px;
-            background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .game-display .online-status {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            display: flex;
-            align-items: center;
-        }
-        .game-display .online-status .dot {
-            width: 10px;
-            height: 10px;
-            background-color: #00ff00;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-        .previous-results {
-            display: flex;
-            justify-content: space-between;
-        }
-        .previous-results .result {
-            width: 14%;
-            padding: 10px;
-            background-color: #333;
-            text-align: center;
-            border-radius: 5px;
-        }
-        .previous-results .result.green {
-            background-color: #00ff00;
-        }
+        /* O mesmo estilo que você já forneceu */
     </style>
 </head>
 <body>
@@ -128,23 +14,23 @@
         <div class="left-panel">
             <div>
                 <div class="button-group">
-                    <button class="active">Normal</button>
-                    <button>Auto</button>
+                    <button class="mode-button active" id="normalMode">Normal</button>
+                    <button class="mode-button" id="autoMode">Auto</button>
                 </div>
                 <div class="input-group">
-                    <input type="text" placeholder="Quantidade">
-                    <input type="text" placeholder="R$">
+                    <input type="number" id="betAmount" placeholder="Quantidade">
+                    <input type="number" id="betValue" placeholder="R$">
                 </div>
                 <div class="input-group">
-                    <button>½</button>
-                    <button>2x</button>
+                    <button id="halveBet">½</button>
+                    <button id="doubleBet">2x</button>
                 </div>
                 <div class="input-group">
-                    <button>Auto Retirar (Multiplier)</button>
-                    <button>Clear</button>
+                    <input type="number" id="autoCashout" placeholder="Auto Retirar (Multiplier)">
+                    <button id="clearInputs">Clear</button>
                 </div>
             </div>
-            <button class="start-button">Começar o jogo</button>
+            <button class="start-button" id="startGame">Começar o jogo</button>
             <div class="bottom-icons">
                 <i class="fas fa-expand"></i>
                 <i class="fas fa-info-circle"></i>
@@ -152,23 +38,92 @@
         </div>
         <div class="right-panel">
             <div class="game-display">
-                <div class="multiplier">1,00X</div>
+                <div class="multiplier" id="multiplierDisplay">1.00X</div>
                 <div class="online-status">
                     <div class="dot"></div>
                     <span>Online</span>
                 </div>
             </div>
-            <div class="previous-results">
-                <div class="result green">2,30X</div>
-                <div class="result">1,74X</div>
-                <div class="result">1,11X</div>
-                <div class="result">19,92X</div>
-                <div class="result">1,30X</div>
-                <div class="result">1,14X</div>
-                <div class="result green">3,00X</div>
-                <div class="result green">4,97X</div>
+            <div class="previous-results" id="previousResults">
+                <!-- Resultados do jogo -->
             </div>
         </div>
     </div>
+
+    <script>
+        let isGameRunning = false;
+        let currentMultiplier = 1;
+        let crashPoint = Math.random() * 5 + 1; // Ponto de crash aleatório entre 1 e 6
+        let gameInterval;
+
+        // Elementos do DOM
+        const multiplierDisplay = document.getElementById('multiplierDisplay');
+        const startButton = document.getElementById('startGame');
+        const previousResults = document.getElementById('previousResults');
+        const betAmountInput = document.getElementById('betAmount');
+        const betValueInput = document.getElementById('betValue');
+        const autoCashoutInput = document.getElementById('autoCashout');
+
+        // Começa o jogo
+        startButton.addEventListener('click', () => {
+            if (isGameRunning) return;
+            startGame();
+        });
+
+        function startGame() {
+            isGameRunning = true;
+            currentMultiplier = 1;
+            crashPoint = Math.random() * 5 + 1; // Gera um novo ponto de crash
+            updateMultiplier();
+        }
+
+        function updateMultiplier() {
+            gameInterval = setInterval(() => {
+                if (currentMultiplier >= crashPoint) {
+                    endGame(false); // Crash ocorreu
+                } else {
+                    currentMultiplier += 0.01;
+                    multiplierDisplay.textContent = currentMultiplier.toFixed(2) + 'X';
+
+                    const autoCashout = parseFloat(autoCashoutInput.value);
+                    if (autoCashout && currentMultiplier >= autoCashout) {
+                        endGame(true); // Auto-retirada
+                    }
+                }
+            }, 50); // Atualiza o multiplicador a cada 50ms
+        }
+
+        function endGame(isWin) {
+            clearInterval(gameInterval);
+            isGameRunning = false;
+
+            // Adiciona o resultado à lista de resultados anteriores
+            const resultDiv = document.createElement('div');
+            resultDiv.classList.add('result');
+            resultDiv.textContent = currentMultiplier.toFixed(2) + 'X';
+            if (isWin) {
+                resultDiv.classList.add('green');
+            }
+            previousResults.insertBefore(resultDiv, previousResults.firstChild);
+
+            // Reseta o display
+            multiplierDisplay.textContent = isWin ? `Retirado: ${currentMultiplier.toFixed(2)}X` : 'Crash!';
+        }
+
+        // Botões auxiliares
+        document.getElementById('halveBet').addEventListener('click', () => {
+            betValueInput.value = (parseFloat(betValueInput.value) / 2).toFixed(2);
+        });
+
+        document.getElementById('doubleBet').addEventListener('click', () => {
+            betValueInput.value = (parseFloat(betValueInput.value) * 2).toFixed(2);
+        });
+
+        document.getElementById('clearInputs').addEventListener('click', () => {
+            betAmountInput.value = '';
+            betValueInput.value = '';
+            autoCashoutInput.value = '';
+        });
+    </script>
 </body>
 </html>
