@@ -9,7 +9,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: black;
+            background-color: #1a1a1a; /* Fundo escuro */
             color: white;
         }
 
@@ -47,19 +47,27 @@
     <div class="container">
         <h1>Adicionar Saldo</h1>
         <!-- Botões de adicionar saldo -->
-        <button class="button" onclick="addSaldo(5)">Adicionar R$5</button>
-        <button class="button" onclick="addSaldo(10)">Adicionar R$10</button>
-        <button class="button" onclick="addSaldo(15)">Adicionar R$15</button>
-        <button class="button" onclick="addSaldo(20)">Adicionar R$20</button>
-        <button class="button" onclick="addSaldo(50)">Adicionar R$50</button>
-        <button class="button" onclick="addSaldo(100)">Adicionar R$100</button>
+        <button class="button" onclick="adicionarSaldo(5)">Adicionar R$5</button>
+        <button class="button" onclick="adicionarSaldo(10)">Adicionar R$10</button>
+        <button class="button" onclick="adicionarSaldo(15)">Adicionar R$15</button>
+        <button class="button" onclick="adicionarSaldo(20)">Adicionar R$20</button>
+        <button class="button" onclick="adicionarSaldo(50)">Adicionar R$50</button>
+        <button class="button" onclick="adicionarSaldo(100)">Adicionar R$100</button>
+        <button class="button" onclick="voltar()">Voltar</button>
     </div>
 
     <script>
         // Função para adicionar saldo
-        function addSaldo(amount) {
-            alert("Você adicionou R$" + amount + " ao saldo!");
-            window.location.href = "index.html"; // Redireciona de volta para a página principal
+        function adicionarSaldo(valor) {
+            const saldoAtual = parseFloat(localStorage.getItem('saldo') || '0.00');
+            const novoSaldo = saldoAtual + valor;
+            localStorage.setItem('saldo', novoSaldo.toFixed(2)); // Atualiza no armazenamento local
+            alert(`Você adicionou R$${valor}. Novo saldo: R$${novoSaldo.toFixed(2)}`);
+        }
+
+        // Função para voltar à página principal
+        function voltar() {
+            window.location.href = "index.html";
         }
     </script>
 </body>
