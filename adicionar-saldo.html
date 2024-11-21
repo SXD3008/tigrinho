@@ -111,6 +111,14 @@
         .pay-button:hover {
             background-color: #ffa726;
         }
+
+        .bonus-text {
+            font-size: 14px;
+            color: #00ff00;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -122,6 +130,10 @@
             <button class="button" onclick="adicionarSaldo(250)">250,00 R$ <span class="gift">🎁</span></button>
             <button class="button" onclick="adicionarSaldo(500)">500,00 R$ <span class="gift">🎁</span></button>
             <button class="button" onclick="adicionarSaldo(1000)">1000,00 R$ <span class="gift">🎁</span></button>
+        </div>
+
+        <div class="bonus-text" id="bonus-text" style="display: none;">
+            Adicionando mais de 500,00 R$, você recebe 25% de bônus!
         </div>
 
         <div class="montante-container">
@@ -144,13 +156,26 @@
         function adicionarSaldo(valor) {
             const montanteInput = document.getElementById("input-value");
             montanteInput.value = valor.toFixed(2).replace('.', ',') + " R$";
-            atualizarValorReceber(valor);
+            calcularReceber(valor);
         }
 
-        function atualizarValorReceber(valor) {
+        function calcularReceber(valor) {
             const receberElement = document.getElementById("receber-value");
             const confirmarValor = document.getElementById("confirmar-valor");
-            const valorFormatado = valor.toFixed(2).replace('.', ',') + " R$";
+            const bonusText = document.getElementById("bonus-text");
+
+            let valorFinal = valor;
+            let bonus = 0;
+
+            if (valor > 500) {
+                bonus = valor * 0.25; // Calcula 25% de bônus
+                valorFinal += bonus;
+                bonusText.style.display = "block"; // Mostra o aviso de bônus
+            } else {
+                bonusText.style.display = "none"; // Esconde o aviso se o valor for menor
+            }
+
+            const valorFormatado = valorFinal.toFixed(2).replace('.', ',') + " R$";
 
             receberElement.textContent = valorFormatado;
             confirmarValor.textContent = valorFormatado;
@@ -165,7 +190,13 @@
                 return;
             }
 
-            saldoAtual += valor;
+            let valorFinal = valor;
+
+            if (valor > 500) {
+                valorFinal += valor * 0.25; // Adiciona o bônus de 25%
+            }
+
+            saldoAtual += valorFinal;
             localStorage.setItem("saldo", saldoAtual.toFixed(2));
 
             alert(`Pagamento confirmado! Seu novo saldo é: ${saldoAtual.toFixed(2).replace('.', ',')} R$`);
@@ -176,7 +207,7 @@
         document.getElementById("input-value").addEventListener("input", (event) => {
             const valor = parseFloat(event.target.value.replace(",", "."));
             if (!isNaN(valor)) {
-                atualizarValorReceber(valor);
+                calcularReceber(valor);
             }
         });
     </script>
