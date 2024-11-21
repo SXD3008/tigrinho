@@ -74,7 +74,7 @@
             <span style="font-size: 18px; color: #00ff00;">$</span>
         </div>
         <div class="saldo-text">
-            <span class="valor">0,00 R$</span>
+            <span class="valor" id="saldo">0,00 R$</span>
             <span class="descricao">SALDO NA CARTEIRA</span>
         </div>
     </div>
@@ -85,10 +85,19 @@
     </div>
 
     <script>
-        // Função para redirecionar o usuário ao clicar no saldo
+        // Função para redirecionar para a página de adicionar saldo
         function redirectToAddSaldo() {
-            window.location.href = "adicionar-saldo.html"; // Caminho para a página de adicionar saldo
+            window.location.href = "adicionar-saldo.html";
         }
+
+        // Atualiza o saldo na página principal
+        function atualizarSaldo() {
+            const saldoAtual = localStorage.getItem('saldo') || '0.00';
+            document.getElementById('saldo').textContent = parseFloat(saldoAtual).toFixed(2) + " R$";
+        }
+
+        // Inicializa o saldo ao carregar a página
+        atualizarSaldo();
     </script>
 </body>
 </html>
