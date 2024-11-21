@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,152 +8,179 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #0c0c0f;
-            color: #fff;
+            background-color: #1a1a1a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
+
         .container {
-            max-width: 900px;
-            margin: 0 auto;
+            width: 80%;
+            max-width: 600px;
+            background-color: #222;
+            border-radius: 10px;
             padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         }
-        .balance-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .balance-header h1 {
-            font-size: 24px;
-            font-weight: bold;
-            color: #f0f0f0;
-        }
-        .balance-options {
+
+        .buttons {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 30px;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
-        .balance-option {
-            background-color: #1a1a2e;
-            color: #ffcc00;
-            padding: 15px 20px;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: bold;
+
+        .button {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-        }
-        .balance-option:hover {
-            background-color: #242438;
-            transform: scale(1.1);
-        }
-        .bonus-text {
+            flex: 1 1 calc(33.33% - 10px);
             text-align: center;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background-color: #444;
+        }
+
+        .button span.gift {
             font-size: 18px;
-            color: #ff9900;
-            margin-bottom: 20px;
-            font-weight: bold;
-            display: none;
+            color: #ffd700;
+            margin-left: 10px;
         }
-        .custom-balance {
-            background-color: #1a1a2e;
-            padding: 20px;
-            border-radius: 12px;
+
+        .montante-container {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 20px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            align-items: center;
         }
-        .custom-balance input {
-            width: calc(100% - 20px);
+
+        .montante-container div {
+            flex: 1;
             padding: 10px;
-            font-size: 16px;
-            margin-bottom: 10px;
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            background-color: #2a2a3e;
-        }
-        .custom-balance input:focus {
-            outline: 2px solid #ffcc00;
-        }
-        .custom-balance button {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            background-color: #00cc66;
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .custom-balance button:hover {
-            transform: scale(1.05);
-        }
-        .footer {
+            background-color: #333;
+            border-radius: 5px;
+            margin-right: 10px;
             text-align: center;
-            margin-top: 30px;
+        }
+
+        .montante-container div:last-child {
+            margin-right: 0;
+        }
+
+        .montante-container div span {
+            display: block;
             font-size: 14px;
+            color: #888;
         }
-        .footer a {
-            color: #00cc66;
-            text-decoration: none;
+
+        .montante-container div input {
+            width: 100%;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+        }
+
+        .pay-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
             font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
         }
-        .footer a:hover {
-            text-decoration: underline;
+
+        .pay-button:hover {
+            background-color: #ffa726;
+        }
+
+        .bonus-text {
+            font-size: 14px;
+            color: #00ff00;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="balance-header">
-            <h1>Adicionar Saldo</h1>
+        <div class="buttons">
+            <button class="button" onclick="adicionarSaldo(25)">25,00 R$ <span class="gift">🎁</span></button>
+            <button class="button" onclick="adicionarSaldo(50)">50,00 R$ <span class="gift">🎁</span></button>
+            <button class="button" onclick="adicionarSaldo(100)">100,00 R$ <span class="gift">🎁</span></button>
+            <button class="button" onclick="adicionarSaldo(250)">250,00 R$ <span class="gift">🎁</span></button>
+            <button class="button" onclick="adicionarSaldo(500)">500,00 R$ <span class="gift">🎁</span></button>
+            <button class="button" onclick="adicionarSaldo(1000)">1000,00 R$ <span class="gift">🎁</span></button>
         </div>
-        <div class="balance-options">
-            <div class="balance-option" onclick="adicionarSaldo(25)">25,00 R$</div>
-            <div class="balance-option" onclick="adicionarSaldo(50)">50,00 R$</div>
-            <div class="balance-option" onclick="adicionarSaldo(100)">100,00 R$</div>
-            <div class="balance-option" onclick="adicionarSaldo(250)">250,00 R$</div>
-            <div class="balance-option" onclick="adicionarSaldo(500)">500,00 R$</div>
-            <div class="balance-option" onclick="adicionarSaldo(1000)">1.000,00 R$</div>
+
+        <div class="bonus-text" id="bonus-text" style="display: none;">
+            Adicionando mais de 500,00 R$, você recebe 25% de bônus!
         </div>
-        <div class="bonus-text" id="bonus-text">
-            Você receberá um bônus de 25% para valores acima de 500,00 R$!
+
+        <div class="montante-container">
+            <div>
+                <span>O SEU MONTANTE</span>
+                <input type="text" id="input-value" placeholder="0,00 R$">
+            </div>
+            <div>
+                <span>VOCÊ VAI RECEBER</span>
+                <div id="receber-value">0,00 R$</div>
+            </div>
         </div>
-        <div class="custom-balance">
-            <input type="text" id="input-value" placeholder="Digite um valor personalizado">
-            <button onclick="confirmarPagamento()">Adicionar Saldo</button>
-        </div>
-        <div class="footer">
-            <a href="index.html">Voltar à Página Inicial</a>
-        </div>
+
+        <button class="pay-button" onclick="confirmarPagamento()">Pagar <span id="confirmar-valor">0,00 R$</span></button>
     </div>
 
     <script>
-        let saldoAtual = parseFloat(localStorage.getItem("saldo") || "0");
-
-        function formatarNumero(valor) {
-            return valor.toFixed(2).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
+        let saldoAtual = parseFloat(localStorage.getItem("saldo")) || 0;
 
         function adicionarSaldo(valor) {
             const montanteInput = document.getElementById("input-value");
-            montanteInput.value = formatarNumero(valor);
-            calcularBonus(valor);
+            montanteInput.value = valor.toFixed(2).replace('.', ',') + " R$";
+            calcularReceber(valor);
         }
 
-        function calcularBonus(valor) {
+        function calcularReceber(valor) {
+            const receberElement = document.getElementById("receber-value");
+            const confirmarValor = document.getElementById("confirmar-valor");
             const bonusText = document.getElementById("bonus-text");
+
+            let valorFinal = valor;
+            let bonus = 0;
+
             if (valor > 500) {
-                bonusText.style.display = "block"; // Exibe aviso de bônus
+                bonus = valor * 0.25; // Calcula 25% de bônus
+                valorFinal += bonus;
+                bonusText.style.display = "block"; // Mostra o aviso de bônus
             } else {
-                bonusText.style.display = "none"; // Oculta aviso de bônus
+                bonusText.style.display = "none"; // Esconde o aviso se o valor for menor
             }
+
+            animateNumber(receberElement, parseFloat(receberElement.textContent.replace(',', '.')), valorFinal);
+            animateNumber(confirmarValor, parseFloat(confirmarValor.textContent.replace(',', '.')), valorFinal);
         }
 
         function confirmarPagamento() {
-            const montanteInput = document.getElementById("input-value").value.replace(/\./g, "").replace(",", ".");
+            const montanteInput = document.getElementById("input-value").value.replace(",", ".");
             const valor = parseFloat(montanteInput);
 
             if (isNaN(valor) || valor <= 0) {
@@ -162,15 +189,41 @@
             }
 
             let valorFinal = valor;
+
             if (valor > 500) {
-                valorFinal += valor * 0.25; // Aplica bônus de 25%
+                valorFinal += valor * 0.25; // Adiciona o bônus de 25%
             }
 
             saldoAtual += valorFinal;
             localStorage.setItem("saldo", saldoAtual.toFixed(2));
-            alert(`Pagamento confirmado! Seu novo saldo é: ${formatarNumero(saldoAtual)} R$`);
+
+            alert(`Pagamento confirmado! Seu novo saldo é: ${saldoAtual.toFixed(2).replace('.', ',')} R$`);
             window.location.href = "index.html";
         }
+
+        function animateNumber(element, from, to, duration = 500) {
+            const range = to - from;
+            const stepTime = Math.abs(Math.floor(duration / range));
+            let current = from;
+            const increment = to > from ? 1 : -1;
+
+            const timer = setInterval(() => {
+                current += increment;
+                element.textContent = current.toFixed(2).replace('.', ',') + " R$";
+
+                if ((increment > 0 && current >= to) || (increment < 0 && current <= to)) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        // Atualiza o valor automaticamente ao preencher o campo personalizado
+        document.getElementById("input-value").addEventListener("input", (event) => {
+            const valor = parseFloat(event.target.value.replace(",", "."));
+            if (!isNaN(valor)) {
+                calcularReceber(valor);
+            }
+        });
     </script>
 </body>
 </html>
