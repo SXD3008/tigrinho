@@ -3,10 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Interface</title>
+    <title>Jogo Crash (Estático)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        /* O mesmo estilo que você já forneceu */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .left-panel, .right-panel {
+            padding: 20px;
+        }
+        .left-panel {
+            width: 30%;
+            background-color: #2a2a3e;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .right-panel {
+            width: 70%;
+            background-color: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .button-group, .input-group {
+            margin-bottom: 20px;
+        }
+        .button-group button, .input-group input, .start-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            border: none;
+            color: #fff;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .button-group button.active, .start-button {
+            background-color: #444;
+        }
+        .game-display {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #2a2a3e;
+            position: relative;
+        }
+        .game-display .multiplier {
+            font-size: 48px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .previous-results {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .previous-results .result {
+            flex: 1;
+            min-width: 48px;
+            padding: 5px;
+            text-align: center;
+            background-color: #444;
+            border-radius: 5px;
+        }
+        .previous-results .result.green {
+            background-color: #00ff00;
+        }
     </style>
 </head>
 <body>
@@ -14,116 +85,28 @@
         <div class="left-panel">
             <div>
                 <div class="button-group">
-                    <button class="mode-button active" id="normalMode">Normal</button>
-                    <button class="mode-button" id="autoMode">Auto</button>
+                    <button class="active">Normal</button>
+                    <button>Auto</button>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="betAmount" placeholder="Quantidade">
-                    <input type="number" id="betValue" placeholder="R$">
+                    <input type="text" placeholder="Quantidade">
+                    <input type="text" placeholder="R$">
                 </div>
-                <div class="input-group">
-                    <button id="halveBet">½</button>
-                    <button id="doubleBet">2x</button>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="autoCashout" placeholder="Auto Retirar (Multiplier)">
-                    <button id="clearInputs">Clear</button>
-                </div>
+                <button>Auto Retirar</button>
             </div>
-            <button class="start-button" id="startGame">Começar o jogo</button>
-            <div class="bottom-icons">
-                <i class="fas fa-expand"></i>
-                <i class="fas fa-info-circle"></i>
-            </div>
+            <button class="start-button">Começar o jogo</button>
         </div>
         <div class="right-panel">
             <div class="game-display">
-                <div class="multiplier" id="multiplierDisplay">1.00X</div>
-                <div class="online-status">
-                    <div class="dot"></div>
-                    <span>Online</span>
-                </div>
+                <div class="multiplier">1.00X</div>
             </div>
-            <div class="previous-results" id="previousResults">
-                <!-- Resultados do jogo -->
+            <div class="previous-results">
+                <div class="result">1.23X</div>
+                <div class="result green">2.34X</div>
+                <div class="result">1.12X</div>
+                <div class="result green">4.56X</div>
             </div>
         </div>
     </div>
-
-    <script>
-        let isGameRunning = false;
-        let currentMultiplier = 1;
-        let crashPoint = Math.random() * 5 + 1; // Ponto de crash aleatório entre 1 e 6
-        let gameInterval;
-
-        // Elementos do DOM
-        const multiplierDisplay = document.getElementById('multiplierDisplay');
-        const startButton = document.getElementById('startGame');
-        const previousResults = document.getElementById('previousResults');
-        const betAmountInput = document.getElementById('betAmount');
-        const betValueInput = document.getElementById('betValue');
-        const autoCashoutInput = document.getElementById('autoCashout');
-
-        // Começa o jogo
-        startButton.addEventListener('click', () => {
-            if (isGameRunning) return;
-            startGame();
-        });
-
-        function startGame() {
-            isGameRunning = true;
-            currentMultiplier = 1;
-            crashPoint = Math.random() * 5 + 1; // Gera um novo ponto de crash
-            updateMultiplier();
-        }
-
-        function updateMultiplier() {
-            gameInterval = setInterval(() => {
-                if (currentMultiplier >= crashPoint) {
-                    endGame(false); // Crash ocorreu
-                } else {
-                    currentMultiplier += 0.01;
-                    multiplierDisplay.textContent = currentMultiplier.toFixed(2) + 'X';
-
-                    const autoCashout = parseFloat(autoCashoutInput.value);
-                    if (autoCashout && currentMultiplier >= autoCashout) {
-                        endGame(true); // Auto-retirada
-                    }
-                }
-            }, 50); // Atualiza o multiplicador a cada 50ms
-        }
-
-        function endGame(isWin) {
-            clearInterval(gameInterval);
-            isGameRunning = false;
-
-            // Adiciona o resultado à lista de resultados anteriores
-            const resultDiv = document.createElement('div');
-            resultDiv.classList.add('result');
-            resultDiv.textContent = currentMultiplier.toFixed(2) + 'X';
-            if (isWin) {
-                resultDiv.classList.add('green');
-            }
-            previousResults.insertBefore(resultDiv, previousResults.firstChild);
-
-            // Reseta o display
-            multiplierDisplay.textContent = isWin ? `Retirado: ${currentMultiplier.toFixed(2)}X` : 'Crash!';
-        }
-
-        // Botões auxiliares
-        document.getElementById('halveBet').addEventListener('click', () => {
-            betValueInput.value = (parseFloat(betValueInput.value) / 2).toFixed(2);
-        });
-
-        document.getElementById('doubleBet').addEventListener('click', () => {
-            betValueInput.value = (parseFloat(betValueInput.value) * 2).toFixed(2);
-        });
-
-        document.getElementById('clearInputs').addEventListener('click', () => {
-            betAmountInput.value = '';
-            betValueInput.value = '';
-            autoCashoutInput.value = '';
-        });
-    </script>
 </body>
 </html>
