@@ -1,89 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saldo na Carteira</title>
+    <title>Principal</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #1a1a1a; /* Fundo escuro */
-            color: white;
+            background-color: #0c0c0f;
+            color: #fff;
         }
-
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px;
+            background-color: #1a1a2e;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
         .saldo-container {
-            position: absolute;
-            top: 10px;
-            left: 10px;
             display: flex;
             align-items: center;
-            background-color: #1f292e;
-            border-radius: 8px;
+            background-color: #242438;
             padding: 10px 20px;
-            color: #00ff00;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
             cursor: pointer;
+            transition: transform 0.2s ease;
         }
-
+        .saldo-container:hover {
+            transform: scale(1.05);
+        }
         .saldo-icon {
-            width: 32px;
-            height: 32px;
-            background-color: #0a2d12;
+            background-color: #00cc66;
+            color: #fff;
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 50%;
             display: flex;
-            justify-content: center;
             align-items: center;
-            border-radius: 6px;
+            justify-content: center;
             margin-right: 10px;
         }
-
-        .saldo-text {
-            display: flex;
-            flex-direction: column;
+        .saldo-info {
+            text-align: left;
         }
-
-        .saldo-text .valor {
-            font-size: 18px;
-            font-weight: bold;
+        .saldo-info span {
+            display: block;
+            font-size: 14px;
+            color: #888;
         }
-
-        .saldo-text .descricao {
-            font-size: 12px;
-            color: #8c8c8c;
-        }
-
-        .saldo-container:hover {
-            background-color: #243740;
+        .saldo-info strong {
+            font-size: 20px;
+            color: #00ff99;
         }
     </style>
 </head>
 <body>
-    <div class="saldo-container" onclick="redirectToAddSaldo()">
-        <div class="saldo-icon">
-            <span style="font-size: 18px; color: #00ff00;">$</span>
+    <div class="header">
+        <div class="saldo-container" onclick="irParaAdicionarSaldo()">
+            <div class="saldo-icon">R$</div>
+            <div class="saldo-info">
+                <span>SALDO NA CARTEIRA</span>
+                <strong id="saldo-display">0,00 R$</strong>
+            </div>
         </div>
-        <div class="saldo-text">
-            <span class="valor" id="saldo">0,00 R$</span>
-            <span class="descricao">SALDO NA CARTEIRA</span>
-        </div>
-    </div>
-
-    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-        <h1>Bem-vindo à sua Base</h1>
     </div>
 
     <script>
-        function redirectToAddSaldo() {
+        // Recuperar saldo do LocalStorage ou inicializar com zero
+        let saldoAtual = parseFloat(localStorage.getItem("saldo") || "0");
+
+        // Formatar número no estilo brasileiro
+        function formatarNumero(valor) {
+            return valor.toFixed(2).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Atualizar o saldo exibido no HTML
+        function atualizarSaldoDisplay() {
+            const saldoDisplay = document.getElementById("saldo-display");
+            saldoDisplay.textContent = `${formatarNumero(saldoAtual)} R$`;
+
+            // Animação de mudança no saldo
+            saldoDisplay.style.transform = "scale(1.2)";
+            setTimeout(() => {
+                saldoDisplay.style.transform = "scale(1)";
+            }, 200);
+        }
+
+        // Navegar para a página de adicionar saldo
+        function irParaAdicionarSaldo() {
             window.location.href = "adicionar-saldo.html";
         }
 
-        function atualizarSaldo() {
-            const saldoAtual = localStorage.getItem('saldo') || '0.00';
-            const saldoFormatado = parseFloat(saldoAtual).toFixed(2).replace('.', ',');
-            document.getElementById('saldo').textContent = `${saldoFormatado} R$`;
-        }
-
-        atualizarSaldo();
+        // Atualizar o saldo ao carregar a página
+        atualizarSaldoDisplay();
     </script>
 </body>
 </html>
