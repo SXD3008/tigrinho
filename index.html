@@ -3,173 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo Crash</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Base com Fundo Preto e Saldo</title>
     <style>
+        /* Estilo global */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #1a1a2e;
-            color: #fff;
+            background-color: black;
+            color: white;
         }
+
+        /* Centralização do conteúdo */
         .container {
-            display: flex;
-            height: 100vh;
-        }
-        .left-panel, .right-panel {
-            padding: 20px;
-        }
-        .left-panel {
-            width: 30%;
-            background-color: #2a2a3e;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .right-panel {
-            width: 70%;
-            background-color: #1a1a2e;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .button-group, .input-group {
-            margin-bottom: 20px;
-        }
-        .button-group button, .input-group input, .start-button {
-            width: 100%;
-            padding: 10px;
-            background-color: #333;
-            border: none;
-            color: #fff;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-        .button-group button.active, .start-button {
-            background-color: #444;
-        }
-        .game-display {
-            flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #2a2a3e;
-            position: relative;
+            height: 100vh;
         }
-        .game-display .multiplier {
-            font-size: 48px;
+
+        /* Saldo no canto superior direito */
+        .saldo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .previous-results {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-        .previous-results .result {
-            flex: 1;
-            min-width: 48px;
-            padding: 5px;
-            text-align: center;
-            background-color: #444;
+            color: white;
+            padding: 10px 20px;
             border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer; /* Indica que o saldo é clicável */
         }
-        .previous-results .result.green {
-            background-color: #00ff00;
+
+        .saldo:hover {
+            background-color: #444;
         }
     </style>
 </head>
 <body>
+    <!-- Saldo no canto superior direito -->
+    <div class="saldo" onclick="redirectToAddSaldo()">
+        Saldo: R$ <span id="balance">100.00</span>
+    </div>
+
+    <!-- Conteúdo central -->
     <div class="container">
-        <div class="left-panel">
-            <div>
-                <div class="input-group">
-                    <input type="number" id="betAmount" placeholder="Quantidade">
-                    <input type="number" id="betValue" placeholder="R$">
-                </div>
-                <div class="input-group">
-                    <input type="number" id="autoCashout" placeholder="Auto Retirar (Multiplier)">
-                </div>
-            </div>
-            <button class="start-button" id="startGame">Começar o jogo</button>
-            <button class="start-button" id="cashOut" disabled>Retirar</button>
-        </div>
-        <div class="right-panel">
-            <div class="game-display">
-                <div class="multiplier" id="multiplierDisplay">1.00X</div>
-            </div>
-            <div class="previous-results" id="previousResults">
-                <!-- Resultados do jogo -->
-            </div>
-        </div>
+        <h1>Bem-vindo à sua Base</h1>
     </div>
 
     <script>
-        let isGameRunning = false;
-        let currentMultiplier = 1.0;
-        let crashPoint = Math.random() * 5 + 1; // Ponto de crash aleatório entre 1 e 6
-        let interval;
-
-        // Elementos do DOM
-        const multiplierDisplay = document.getElementById('multiplierDisplay');
-        const startGameButton = document.getElementById('startGame');
-        const cashOutButton = document.getElementById('cashOut');
-        const previousResults = document.getElementById('previousResults');
-        const autoCashoutInput = document.getElementById('autoCashout');
-
-        // Função para iniciar o jogo
-        startGameButton.addEventListener('click', () => {
-            if (isGameRunning) return;
-
-            isGameRunning = true;
-            currentMultiplier = 1.0;
-            crashPoint = Math.random() * 5 + 1; // Define novo ponto de crash
-            multiplierDisplay.textContent = "1.00X";
-            cashOutButton.disabled = false;
-
-            interval = setInterval(() => {
-                currentMultiplier += 0.01;
-                multiplierDisplay.textContent = currentMultiplier.toFixed(2) + 'X';
-
-                // Verifica se atingiu o ponto de crash
-                if (currentMultiplier >= crashPoint) {
-                    endGame(false); // Perdeu
-                }
-
-                // Verifica se o Auto Retirar foi definido e alcançado
-                const autoCashout = parseFloat(autoCashoutInput.value);
-                if (autoCashout && currentMultiplier >= autoCashout) {
-                    cashOut();
-                }
-            }, 50);
-        });
-
-        // Função para encerrar o jogo
-        function endGame(isWin) {
-            clearInterval(interval);
-            isGameRunning = false;
-            cashOutButton.disabled = true;
-
-            const resultDiv = document.createElement('div');
-            resultDiv.classList.add('result');
-            resultDiv.textContent = currentMultiplier.toFixed(2) + 'X';
-            if (isWin) {
-                resultDiv.classList.add('green');
-            }
-            previousResults.insertBefore(resultDiv, previousResults.firstChild);
-
-            if (!isWin) {
-                multiplierDisplay.textContent = 'Crash!';
-            }
-        }
-
-        // Função para retirar
-        cashOutButton.addEventListener('click', cashOut);
-
-        function cashOut() {
-            if (!isGameRunning) return;
-            endGame(true);
+        // Função para redirecionar o usuário
+        function redirectToAddSaldo() {
+            window.location.href = "adicionar-saldo.html"; // Caminho para a nova página
         }
     </script>
 </body>
