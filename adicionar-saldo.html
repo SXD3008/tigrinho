@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,179 +8,130 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #1a1a2e;
+            color: #fff;
         }
-
         .container {
-            width: 80%;
-            max-width: 600px;
-            background-color: #222;
-            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         }
-
-        .buttons {
+        .balance-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .balance-header h1 {
+            font-size: 24px;
+        }
+        .balance-options {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            gap: 10px;
+            justify-content: center;
             margin-bottom: 20px;
         }
-
-        .button {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            flex: 1 1 calc(33.33% - 10px);
-            text-align: center;
-            font-size: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-        }
-
-        .button:hover {
-            background-color: #444;
-        }
-
-        .button span.gift {
-            font-size: 18px;
-            color: #ffd700;
-            margin-left: 10px;
-        }
-
-        .montante-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            align-items: center;
-        }
-
-        .montante-container div {
-            flex: 1;
-            padding: 10px;
-            background-color: #333;
-            border-radius: 5px;
-            margin-right: 10px;
-            text-align: center;
-        }
-
-        .montante-container div:last-child {
-            margin-right: 0;
-        }
-
-        .montante-container div span {
-            display: block;
-            font-size: 14px;
-            color: #888;
-        }
-
-        .montante-container div input {
-            width: 100%;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            text-align: center;
-            outline: none;
-        }
-
-        .pay-button {
-            width: 100%;
-            padding: 15px;
-            background-color: #ff9800;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        .pay-button:hover {
-            background-color: #ffa726;
-        }
-
-        .bonus-text {
-            font-size: 14px;
+        .balance-option {
+            background-color: #2a2a3e;
             color: #00ff00;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
             text-align: center;
+            transition: transform 0.2s ease;
+        }
+        .balance-option:hover {
+            transform: scale(1.05);
+        }
+        .custom-balance {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .custom-balance input {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
             margin-bottom: 10px;
-            font-weight: bold;
+        }
+        .custom-balance button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #00ff00;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .custom-balance button:hover {
+            transform: scale(1.05);
+        }
+        .bonus-text {
+            text-align: center;
+            font-size: 16px;
+            color: #ffcc00;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="buttons">
-            <button class="button" onclick="adicionarSaldo(25)">25,00 R$ <span class="gift">🎁</span></button>
-            <button class="button" onclick="adicionarSaldo(50)">50,00 R$ <span class="gift">🎁</span></button>
-            <button class="button" onclick="adicionarSaldo(100)">100,00 R$ <span class="gift">🎁</span></button>
-            <button class="button" onclick="adicionarSaldo(250)">250,00 R$ <span class="gift">🎁</span></button>
-            <button class="button" onclick="adicionarSaldo(500)">500,00 R$ <span class="gift">🎁</span></button>
-            <button class="button" onclick="adicionarSaldo(1000)">1000,00 R$ <span class="gift">🎁</span></button>
+        <div class="balance-header">
+            <h1>Adicionar Saldo</h1>
         </div>
-
-        <div class="bonus-text" id="bonus-text" style="display: none;">
-            Adicionando mais de 500,00 R$, você recebe 25% de bônus!
+        <div class="balance-options">
+            <div class="balance-option" onclick="adicionarSaldo(25)">25,00 R$</div>
+            <div class="balance-option" onclick="adicionarSaldo(50)">50,00 R$</div>
+            <div class="balance-option" onclick="adicionarSaldo(100)">100,00 R$</div>
+            <div class="balance-option" onclick="adicionarSaldo(250)">250,00 R$</div>
+            <div class="balance-option" onclick="adicionarSaldo(500)">500,00 R$</div>
+            <div class="balance-option" onclick="adicionarSaldo(1000)">1.000,00 R$</div>
         </div>
-
-        <div class="montante-container">
-            <div>
-                <span>O SEU MONTANTE</span>
-                <input type="text" id="input-value" placeholder="0,00 R$">
-            </div>
-            <div>
-                <span>VOCÊ VAI RECEBER</span>
-                <div id="receber-value">0,00 R$</div>
-            </div>
+        <div class="bonus-text" id="bonus-text">
+            Você receberá um bônus de 25% para valores acima de 500,00 R$!
         </div>
-
-        <button class="pay-button" onclick="confirmarPagamento()">Pagar <span id="confirmar-valor">0,00 R$</span></button>
+        <div class="custom-balance">
+            <input type="text" id="input-value" placeholder="Digite o valor personalizado">
+            <button onclick="confirmarPagamento()">Adicionar Saldo</button>
+        </div>
+        <div id="receber-value" style="text-align:center; font-size:18px;"></div>
+        <div class="footer">
+            <a href="index.html" style="color: #00ff00; text-decoration: none;">Voltar à Página Inicial</a>
+        </div>
     </div>
 
     <script>
-        let saldoAtual = parseFloat(localStorage.getItem("saldo")) || 0;
+        let saldoAtual = parseFloat(localStorage.getItem("saldo") || "0");
+
+        function formatarNumero(valor) {
+            return valor.toFixed(2).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
 
         function adicionarSaldo(valor) {
             const montanteInput = document.getElementById("input-value");
-            montanteInput.value = valor.toFixed(2).replace('.', ',') + " R$";
+            montanteInput.value = formatarNumero(valor);
             calcularReceber(valor);
         }
 
         function calcularReceber(valor) {
-            const receberElement = document.getElementById("receber-value");
-            const confirmarValor = document.getElementById("confirmar-valor");
             const bonusText = document.getElementById("bonus-text");
-
             let valorFinal = valor;
-            let bonus = 0;
 
             if (valor > 500) {
-                bonus = valor * 0.25; // Calcula 25% de bônus
-                valorFinal += bonus;
-                bonusText.style.display = "block"; // Mostra o aviso de bônus
+                bonusText.style.display = "block"; // Exibe aviso de bônus
             } else {
-                bonusText.style.display = "none"; // Esconde o aviso se o valor for menor
+                bonusText.style.display = "none"; // Oculta aviso de bônus
             }
-
-            animateNumber(receberElement, parseFloat(receberElement.textContent.replace(',', '.')), valorFinal);
-            animateNumber(confirmarValor, parseFloat(confirmarValor.textContent.replace(',', '.')), valorFinal);
         }
 
         function confirmarPagamento() {
-            const montanteInput = document.getElementById("input-value").value.replace(",", ".");
+            const montanteInput = document.getElementById("input-value").value.replace(/\./g, "").replace(",", ".");
             const valor = parseFloat(montanteInput);
 
             if (isNaN(valor) || valor <= 0) {
@@ -189,15 +140,13 @@
             }
 
             let valorFinal = valor;
-
             if (valor > 500) {
-                valorFinal += valor * 0.25; // Adiciona o bônus de 25%
+                valorFinal += valor * 0.25; // Aplica bônus de 25%
             }
 
             saldoAtual += valorFinal;
             localStorage.setItem("saldo", saldoAtual.toFixed(2));
-
-            alert(`Pagamento confirmado! Seu novo saldo é: ${saldoAtual.toFixed(2).replace('.', ',')} R$`);
+            alert(`Pagamento confirmado! Seu novo saldo é: ${formatarNumero(saldoAtual)} R$`);
             window.location.href = "index.html";
         }
 
@@ -209,21 +158,13 @@
 
             const timer = setInterval(() => {
                 current += increment;
-                element.textContent = current.toFixed(2).replace('.', ',') + " R$";
+                element.textContent = formatarNumero(current) + " R$";
 
                 if ((increment > 0 && current >= to) || (increment < 0 && current <= to)) {
                     clearInterval(timer);
                 }
             }, stepTime);
         }
-
-        // Atualiza o valor automaticamente ao preencher o campo personalizado
-        document.getElementById("input-value").addEventListener("input", (event) => {
-            const valor = parseFloat(event.target.value.replace(",", "."));
-            if (!isNaN(valor)) {
-                calcularReceber(valor);
-            }
-        });
     </script>
 </body>
 </html>
