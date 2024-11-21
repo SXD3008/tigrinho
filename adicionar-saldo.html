@@ -175,8 +175,8 @@
                 bonusText.style.display = "none"; // Esconde o aviso se o valor for menor
             }
 
-            animateNumber(receberElement, parseFloat(receberElement.textContent.replace(',', '.')), valorFinal);
-            animateNumber(confirmarValor, parseFloat(confirmarValor.textContent.replace(',', '.')), valorFinal);
+            receberElement.textContent = valorFinal.toFixed(2).replace('.', ',') + " R$";
+            confirmarValor.textContent = valorFinal.toFixed(2).replace('.', ',') + " R$";
         }
 
         function confirmarPagamento() {
@@ -194,27 +194,17 @@
                 valorFinal += valor * 0.25; // Adiciona o bônus de 25%
             }
 
+            // Confirmação do pagamento
+            const confirmacao = confirm(`Você está prestes a adicionar ${valorFinal.toFixed(2).replace('.', ',')} R$. Deseja continuar?`);
+            if (!confirmacao) {
+                return;
+            }
+
             saldoAtual += valorFinal;
             localStorage.setItem("saldo", saldoAtual.toFixed(2));
 
             alert(`Pagamento confirmado! Seu novo saldo é: ${saldoAtual.toFixed(2).replace('.', ',')} R$`);
             window.location.href = "index.html";
-        }
-
-        function animateNumber(element, from, to, duration = 500) {
-            const range = to - from;
-            const stepTime = Math.abs(Math.floor(duration / range));
-            let current = from;
-            const increment = to > from ? 1 : -1;
-
-            const timer = setInterval(() => {
-                current += increment;
-                element.textContent = current.toFixed(2).replace('.', ',') + " R$";
-
-                if ((increment > 0 && current >= to) || (increment < 0 && current <= to)) {
-                    clearInterval(timer);
-                }
-            }, stepTime);
         }
 
         // Atualiza o valor automaticamente ao preencher o campo personalizado
