@@ -194,8 +194,8 @@
                 valorFinal += valor * 0.25; // Adiciona o bônus de 25%
             }
 
-            // Confirmação do pagamento
-            const confirmacao = confirm(`Você está prestes a adicionar ${valorFinal.toFixed(2).replace('.', ',')} R$. Deseja continuar?`);
+            // Confirmação do pagamentoR
+            const confirmacao = confirm(`Você vai comprar R$ ${valorFinal.toFixed(2).replace('.', ',')} Deseja confirmar?`);
             if (!confirmacao) {
                 return;
             }
