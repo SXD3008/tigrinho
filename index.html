@@ -3,57 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base com Fundo Preto e Saldo</title>
+    <title>Saldo na Carteira</title>
     <style>
         /* Estilo global */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: black;
+            background-color: #1a1a1a; /* Fundo escuro */
             color: white;
         }
 
-        /* Centralização do conteúdo */
-        .container {
+        /* Estilo do saldo */
+        .saldo-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            background-color: #1f292e; /* Fundo do saldo */
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: #00ff00; /* Cor do texto verde */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer; /* Cursor de clique */
+        }
+
+        /* Ícone do saldo */
+        .saldo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #0a2d12; /* Fundo do ícone */
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            border-radius: 6px;
+            margin-right: 10px;
         }
 
-        /* Saldo no canto superior direito */
-        .saldo {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer; /* Indica que o saldo é clicável */
+        /* Texto do saldo */
+        .saldo-text {
+            display: flex;
+            flex-direction: column;
         }
 
-        .saldo:hover {
-            background-color: #444;
+        .saldo-text .valor {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .saldo-text .descricao {
+            font-size: 12px;
+            color: #8c8c8c; /* Texto cinza claro */
+        }
+
+        /* Hover no saldo */
+        .saldo-container:hover {
+            background-color: #243740;
+        }
+
+        /* Hover no ícone */
+        .saldo-icon:hover {
+            background-color: #0f4220;
         }
     </style>
 </head>
 <body>
-    <!-- Saldo no canto superior direito -->
-    <div class="saldo" onclick="redirectToAddSaldo()">
-        Saldo: R$ <span id="balance">100.00</span>
+    <!-- Saldo no canto superior -->
+    <div class="saldo-container" onclick="redirectToAddSaldo()">
+        <div class="saldo-icon">
+            <span style="font-size: 18px; color: #00ff00;">$</span>
+        </div>
+        <div class="saldo-text">
+            <span class="valor">0,00 R$</span>
+            <span class="descricao">SALDO NA CARTEIRA</span>
+        </div>
     </div>
 
-    <!-- Conteúdo central -->
-    <div class="container">
+    <!-- Conteúdo da página -->
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
         <h1>Bem-vindo à sua Base</h1>
     </div>
 
     <script>
-        // Função para redirecionar o usuário
+        // Função para redirecionar o usuário ao clicar no saldo
         function redirectToAddSaldo() {
-            window.location.href = "adicionar-saldo.html"; // Caminho para a nova página
+            window.location.href = "adicionar-saldo.html"; // Caminho para a página de adicionar saldo
         }
     </script>
 </body>
