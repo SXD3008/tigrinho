@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saldo na Carteira</title>
     <style>
-        /* Estilo global */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -13,26 +12,24 @@
             color: white;
         }
 
-        /* Estilo do saldo */
         .saldo-container {
             position: absolute;
             top: 10px;
             left: 10px;
             display: flex;
             align-items: center;
-            background-color: #1f292e; /* Fundo do saldo */
+            background-color: #1f292e;
             border-radius: 8px;
             padding: 10px 20px;
-            color: #00ff00; /* Cor do texto verde */
+            color: #00ff00;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            cursor: pointer; /* Cursor de clique */
+            cursor: pointer;
         }
 
-        /* Ícone do saldo */
         .saldo-icon {
             width: 32px;
             height: 32px;
-            background-color: #0a2d12; /* Fundo do ícone */
+            background-color: #0a2d12;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -40,7 +37,6 @@
             margin-right: 10px;
         }
 
-        /* Texto do saldo */
         .saldo-text {
             display: flex;
             flex-direction: column;
@@ -53,22 +49,15 @@
 
         .saldo-text .descricao {
             font-size: 12px;
-            color: #8c8c8c; /* Texto cinza claro */
+            color: #8c8c8c;
         }
 
-        /* Hover no saldo */
         .saldo-container:hover {
             background-color: #243740;
-        }
-
-        /* Hover no ícone */
-        .saldo-icon:hover {
-            background-color: #0f4220;
         }
     </style>
 </head>
 <body>
-    <!-- Saldo no canto superior -->
     <div class="saldo-container" onclick="redirectToAddSaldo()">
         <div class="saldo-icon">
             <span style="font-size: 18px; color: #00ff00;">$</span>
@@ -79,24 +68,21 @@
         </div>
     </div>
 
-    <!-- Conteúdo da página -->
     <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
         <h1>Bem-vindo à sua Base</h1>
     </div>
 
     <script>
-        // Função para redirecionar para a página de adicionar saldo
         function redirectToAddSaldo() {
             window.location.href = "adicionar-saldo.html";
         }
 
-        // Atualiza o saldo na página principal
         function atualizarSaldo() {
             const saldoAtual = localStorage.getItem('saldo') || '0.00';
-            document.getElementById('saldo').textContent = parseFloat(saldoAtual).toFixed(2) + " R$";
+            const saldoFormatado = parseFloat(saldoAtual).toFixed(2).replace('.', ',');
+            document.getElementById('saldo').textContent = `${saldoFormatado} R$`;
         }
 
-        // Inicializa o saldo ao carregar a página
         atualizarSaldo();
     </script>
 </body>
