@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Saldo</title>
     <style>
+        /* Estilo Global */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -16,77 +17,95 @@
             height: 100vh;
         }
 
+        /* Container Principal */
         .container {
-            width: 80%;
+            width: 90%;
             max-width: 600px;
             background-color: #222;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
         }
 
+        /* Botões de Valores Fixos */
         .buttons {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
         .button {
             background-color: #333;
             color: white;
-            padding: 10px 20px;
-            margin: 5px;
+            padding: 10px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            flex: 1 1 calc(33.33% - 10px);
+            flex: 1 1 calc(30% - 10px);
+            font-size: 14px;
             text-align: center;
-            font-size: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         .button:hover {
             background-color: #444;
+            transform: scale(1.05);
         }
 
         .button span.gift {
-            font-size: 18px;
+            font-size: 12px;
             color: #ffd700;
-            margin-left: 10px;
+            margin-left: 5px;
         }
 
+        /* Mensagem de Bônus */
+        .bonus-text {
+            font-size: 14px;
+            color: #00ff00;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Container de Montante */
         .montante-container {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
+            gap: 10px;
             margin-bottom: 20px;
-            align-items: center;
         }
 
         .montante-container div {
-            flex: 1;
-            padding: 10px;
+            flex: 1 1 calc(50% - 10px);
             background-color: #333;
             border-radius: 5px;
-            margin-right: 10px;
+            padding: 10px;
             text-align: center;
         }
 
-        .montante-container div:last-child {
-            margin-right: 0;
-        }
-
         .montante-container div span {
-            display: block;
-            font-size: 14px;
+            font-size: 12px;
             color: #888;
         }
 
         .montante-container div input {
             width: 100%;
+            padding: 5px;
             background: none;
             border: none;
             color: white;
@@ -95,6 +114,7 @@
             outline: none;
         }
 
+        /* Botão de Pagamento */
         .pay-button {
             width: 100%;
             padding: 15px;
@@ -102,22 +122,27 @@
             color: white;
             border: none;
             border-radius: 5px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         .pay-button:hover {
             background-color: #ffa726;
+            transform: scale(1.05);
         }
 
-        .bonus-text {
-            font-size: 14px;
-            color: #00ff00;
-            text-align: center;
-            margin-bottom: 10px;
-            font-weight: bold;
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .button {
+                flex: 1 1 100%;
+            }
+
+            .montante-container div {
+                flex: 1 1 100%;
+            }
         }
     </style>
 </head>
@@ -194,11 +219,8 @@
                 valorFinal += valor * 0.25; // Adiciona o bônus de 25%
             }
 
-            // Confirmação do pagamento
             const confirmacao = confirm(`Você está prestes a adicionar ${valorFinal.toFixed(2).replace('.', ',')} R$. Deseja continuar?`);
-            if (!confirmacao) {
-                return;
-            }
+            if (!confirmacao) return;
 
             saldoAtual += valorFinal;
             localStorage.setItem("saldo", saldoAtual.toFixed(2));
@@ -207,12 +229,9 @@
             window.location.href = "index.html";
         }
 
-        // Atualiza o valor automaticamente ao preencher o campo personalizado
         document.getElementById("input-value").addEventListener("input", (event) => {
             const valor = parseFloat(event.target.value.replace(",", "."));
-            if (!isNaN(valor)) {
-                calcularReceber(valor);
-            }
+            if (!isNaN(valor)) calcularReceber(valor);
         });
     </script>
 </body>
