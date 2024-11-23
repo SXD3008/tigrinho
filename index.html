@@ -67,34 +67,46 @@
         </div>
     </div>
 
-    <script>
-        // Recuperar saldo do LocalStorage ou inicializar com zero
-        let saldoAtual = parseFloat(localStorage.getItem("saldo") || "0");
+<script type="module">
+  import { db } from './firebase-config.js';
+  import { doc, getDoc } from "firebase/firestore";
 
-        // Formatar número no estilo brasileiro
-        function formatarNumero(valor) {
-            return valor.toFixed(2).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
+  const userId = "1"; // ID do documento no Firestore
 
-        // Atualizar o saldo exibido no HTML
-        function atualizarSaldoDisplay() {
-            const saldoDisplay = document.getElementById("saldo-display");
-            saldoDisplay.textContent = `${formatarNumero(saldoAtual)} R$`;
+  // Função para buscar o saldo do Firestore
+  async function buscarSaldo() {
+    const docRef = doc(db, "usuarios", userId);
+    const docSnap = await getDoc(docRef);
 
-            // Animação de mudança no saldo
-            saldoDisplay.style.transform = "scale(1.2)";
-            setTimeout(() => {
-                saldoDisplay.style.transform = "scale(1)";
-            }, 200);
-        }
+    if (docSnap.exists()) {
+      return docSnap.data().saldo;
+    } else {
+      alert("Usuário não encontrado.");
+      return 0;
+    }
+  }
 
-        // Navegar para a página de adicionar saldo
-        function irParaAdicionarSaldo() {
-            window.location.href = "adicionar-saldo.html";
-        }
+  // Função para atualizar o saldo exibido na página
+  async function atualizarSaldoDisplay() {
+    const saldoAtual = await buscarSaldo();
+    const saldoDisplay = document.getElementById("saldo-display");
+    saldoDisplay.textContent = `${saldoAtual.toFixed(2).replace('.', ',')} R$`;
 
-        // Atualizar o saldo ao carregar a página
-        atualizarSaldoDisplay();
-    </script>
+    // Animação de mudança no saldo
+    saldoDisplay.style.transform = "scale(1.2)";
+    setTimeout(() => {
+      saldoDisplay.style.transform = "scale(1)";
+    }, 200);
+  }
+
+  // Navegar para a página de adicionar saldo
+  function irParaAdicionarSaldo() {
+    window.location.href = "adicionar-saldo.html";
+  }
+
+  // Atualizar saldo ao carregar a página
+  document.addEventListener("DOMContentLoaded", atualizarSaldoDisplay);
+</script>
+
 </body>
 </html>
