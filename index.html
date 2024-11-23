@@ -5,55 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Principal</title>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #0c0c0f;
-            color: #fff;
-        }
-        .header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 20px;
-            background-color: #1a1a2e;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        .saldo-container {
-            display: flex;
-            align-items: center;
-            background-color: #242438;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .saldo-container:hover {
-            transform: scale(1.05);
-        }
-        .saldo-icon {
-            background-color: #00cc66;
-            color: #fff;
-            font-size: 18px;
-            padding: 10px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-        }
-        .saldo-info {
-            text-align: left;
-        }
-        .saldo-info span {
-            display: block;
-            font-size: 14px;
-            color: #888;
-        }
-        .saldo-info strong {
-            font-size: 20px;
-            color: #00ff99;
-        }
+        /* Estilo do body, header e botões... */
     </style>
 </head>
 <body>
@@ -67,12 +19,10 @@
         </div>
     </div>
 
-    <!-- Script para Firebase -->
     <script type="module">
         import { initializeApp } from "firebase/app";
         import { getFirestore, doc, getDoc } from "firebase/firestore";
 
-        // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyC-5N3HkmWCZDfpbTSSe6JwBjLiUjLllEw",
             authDomain: "data-do-tigrin.firebaseapp.com",
@@ -85,15 +35,13 @@
 
         // Inicializando o Firebase
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app); // Inicializa o Firestore
+        const db = getFirestore(app);
 
-        const userId = "1"; // ID do documento no Firestore
+        const userId = "1"; // ID do usuário no Firestore
 
-        // Função para buscar o saldo do Firestore
         async function buscarSaldo() {
             const docRef = doc(db, "usuarios", userId);
             const docSnap = await getDoc(docRef);
-
             if (docSnap.exists()) {
                 return docSnap.data().saldo;
             } else {
@@ -102,26 +50,23 @@
             }
         }
 
-        // Função para atualizar o saldo exibido na página
         async function atualizarSaldoDisplay() {
             const saldoAtual = await buscarSaldo();
             const saldoDisplay = document.getElementById("saldo-display");
             saldoDisplay.textContent = `${saldoAtual.toFixed(2).replace('.', ',')} R$`;
-
-            // Animação de mudança no saldo
             saldoDisplay.style.transform = "scale(1.2)";
             setTimeout(() => {
                 saldoDisplay.style.transform = "scale(1)";
             }, 200);
         }
 
-        // Função de navegação para adicionar saldo
+        // Função de navegação para a página de adicionar saldo
         function irParaAdicionarSaldo() {
             window.location.href = "adicionar-saldo.html";
         }
 
-        // Atualizar saldo ao carregar a página
         document.addEventListener("DOMContentLoaded", atualizarSaldoDisplay);
     </script>
+
 </body>
 </html>
