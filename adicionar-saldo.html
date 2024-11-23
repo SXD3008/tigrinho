@@ -1,160 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Saldo</title>
     <style>
-        /* Estilo Global */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        /* Container Principal */
-        .container {
-            width: 90%;
-            max-width: 600px;
-            background-color: #222;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-
-        /* Botões de Valores Fixos */
-        .buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            flex: 1 1 calc(30% - 10px);
-            font-size: 14px;
-            text-align: center;
-            font-weight: bold;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .button:hover {
-            background-color: #444;
-            transform: scale(1.05);
-        }
-
-        .button span.gift {
-            font-size: 12px;
-            color: #ffd700;
-            margin-left: 5px;
-        }
-
-        /* Mensagem de Bônus */
-        .bonus-text {
-            font-size: 14px;
-            color: #00ff00;
-            text-align: center;
-            margin-bottom: 10px;
-            font-weight: bold;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Container de Montante */
-        .montante-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .montante-container div {
-            flex: 1 1 calc(50% - 10px);
-            background-color: #333;
-            border-radius: 5px;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .montante-container div span {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .montante-container div input {
-            width: 100%;
-            padding: 5px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            text-align: center;
-            outline: none;
-        }
-
-        /* Botão de Pagamento */
-        .pay-button {
-            width: 100%;
-            padding: 15px;
-            background-color: #ff9800;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .pay-button:hover {
-            background-color: #ffa726;
-            transform: scale(1.05);
-        }
-
-        /* Responsividade */
-        @media (max-width: 600px) {
-            .button {
-                flex: 1 1 100%;
-            }
-
-            .montante-container div {
-                flex: 1 1 100%;
-            }
-        }
+        /* Estilos do body e dos botões... */
     </style>
 </head>
 <body>
     <div class="container">
         <div class="buttons">
-            <button class="button" onclick="adicionarSaldo(25)">25,00 R$ <span class="gift">🎁</span></button>
-            <button class="button" onclick="adicionarSaldo(50)">50,00 R$ <span class="gift">🎁</span></button>
-            <button class="button" onclick="adicionarSaldo(100)">100,00 R$ <span class="gift">🎁</span></button>
-            <button class="button" onclick="adicionarSaldo(250)">250,00 R$ <span class="gift">🎁</span></button>
-            <button class="button" onclick="adicionarSaldo(500)">500,00 R$ <span class="gift">🎁</span></button>
-            <button class="button" onclick="adicionarSaldo(1000)">1000,00 R$ <span class="gift">🎁</span></button>
+            <button class="button" onclick="adicionarSaldo(25)">25,00 R$</button>
+            <button class="button" onclick="adicionarSaldo(50)">50,00 R$</button>
+            <button class="button" onclick="adicionarSaldo(100)">100,00 R$</button>
+            <button class="button" onclick="adicionarSaldo(250)">250,00 R$</button>
+            <button class="button" onclick="adicionarSaldo(500)">500,00 R$</button>
+            <button class="button" onclick="adicionarSaldo(1000)">1000,00 R$</button>
         </div>
 
         <div class="bonus-text" id="bonus-text" style="display: none;">
@@ -172,59 +34,84 @@
             </div>
         </div>
 
-        <button class="pay-button" onclick="confirmarPagamento()">Pagar <span id="confirmar-valor">0,00 R$</span></button>
+        <button class="pay-button" onclick="confirmarPagamento()">Pagar</button>
     </div>
-<script type="module">
-  import { db } from './firebase-config.js';
-  import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-  const userId = "1"; // ID do documento no Firestore
+    <script type="module">
+        import { db } from './firebase-config.js';
+        import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-  // Função para buscar o saldo atual do Firestore
-  async function buscarSaldo() {
-    const docRef = doc(db, "usuarios", userId);
-    const docSnap = await getDoc(docRef);
+        const userId = "1"; // ID do documento no Firestore
 
-    if (docSnap.exists()) {
-      return docSnap.data().saldo;
-    } else {
-      alert("Usuário não encontrado.");
-      return 0;
-    }
-  }
+        async function buscarSaldo() {
+            const docRef = doc(db, "usuarios", userId);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                return docSnap.data().saldo;
+            } else {
+                alert("Usuário não encontrado.");
+                return 0;
+            }
+        }
 
-  // Função para atualizar o saldo no Firestore
-  async function atualizarSaldo(valor) {
-    const docRef = doc(db, "usuarios", userId);
-    const saldoAtual = await buscarSaldo();
-    const novoSaldo = saldoAtual + valor;
+        async function atualizarSaldoDisplay() {
+            const saldoAtual = await buscarSaldo();
+            const saldoDisplay = document.getElementById("saldo-display");
+            saldoDisplay.textContent = `${saldoAtual.toFixed(2).replace('.', ',')} R$`;
+            saldoDisplay.style.transform = "scale(1.2)";
+            setTimeout(() => {
+                saldoDisplay.style.transform = "scale(1)";
+            }, 200);
+        }
 
-    await updateDoc(docRef, { saldo: novoSaldo });
-    alert(`Pagamento confirmado! Seu novo saldo é: ${novoSaldo.toFixed(2).replace('.', ',')} R$`);
-    window.location.href = "index.html";
-  }
+        function adicionarSaldo(valor) {
+            document.getElementById("input-value").value = valor.toFixed(2).replace('.', ',') + " R$";
+            calcularReceber(valor);
+        }
 
-  // Função de confirmação de pagamento
-  async function confirmarPagamento() {
-    const montanteInput = document.getElementById("input-value").value.replace(",", ".");
-    const valor = parseFloat(montanteInput);
+        function calcularReceber(valor) {
+            const receberElement = document.getElementById("receber-value");
+            const confirmarValor = document.getElementById("confirmar-valor");
+            const bonusText = document.getElementById("bonus-text");
 
-    if (isNaN(valor) || valor <= 0) {
-      alert("Por favor, insira um valor válido!");
-      return;
-    }
+            let valorFinal = valor;
+            let bonus = 0;
 
-    let valorFinal = valor;
+            if (valor > 500) {
+                bonus = valor * 0.25; // Calcula 25% de bônus
+                valorFinal += bonus;
+                bonusText.style.display = "block"; // Mostra o aviso de bônus
+            } else {
+                bonusText.style.display = "none"; // Esconde o aviso
+            }
 
-    if (valor > 500) {
-      valorFinal += valor * 0.25; // Adiciona o bônus de 25%
-    }
+            receberElement.textContent = valorFinal.toFixed(2).replace('.', ',') + " R$";
+            confirmarValor.textContent = valorFinal.toFixed(2).replace('.', ',') + " R$";
+        }
 
-    const confirmacao = confirm(`Você está prestes a adicionar ${valorFinal.toFixed(2).replace('.', ',')} R$. Deseja continuar?`);
-    if (!confirmacao) return;
+        async function confirmarPagamento() {
+            const montanteInput = document.getElementById("input-value").value.replace(",", ".");
+            const valor = parseFloat(montanteInput);
 
-    await atualizarSaldo(valorFinal);
-  }
-</script>
+            if (isNaN(valor) || valor <= 0) {
+                alert("Por favor, insira um valor válido!");
+                return;
+            }
+
+            let valorFinal = valor;
+
+            if (valor > 500) {
+                valorFinal += valor * 0.25; // Adiciona bônus de 25%
+            }
+
+            const confirmacao = confirm(`Você está prestes a adicionar ${valorFinal.toFixed(2).replace('.', ',')} R$. Deseja continuar?`);
+            if (!confirmacao) return;
+
+            await atualizarSaldo(valorFinal);
+            window.location.href = "index.html"; // Retorna à página principal
+        }
+
+    </script>
+
 </body>
 </html>
