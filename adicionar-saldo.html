@@ -174,65 +174,57 @@
 
         <button class="pay-button" onclick="confirmarPagamento()">Pagar <span id="confirmar-valor">0,00 R$</span></button>
     </div>
+<script type="module">
+  import { db } from './firebase-config.js';
+  import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-    <script>
-        let saldoAtual = parseFloat(localStorage.getItem("saldo")) || 0;
+  const userId = "1"; // ID do documento no Firestore
 
-        function adicionarSaldo(valor) {
-            const montanteInput = document.getElementById("input-value");
-            montanteInput.value = valor.toFixed(2).replace('.', ',') + " R$";
-            calcularReceber(valor);
-        }
+  // Função para buscar o saldo atual do Firestore
+  async function buscarSaldo() {
+    const docRef = doc(db, "usuarios", userId);
+    const docSnap = await getDoc(docRef);
 
-        function calcularReceber(valor) {
-            const receberElement = document.getElementById("receber-value");
-            const confirmarValor = document.getElementById("confirmar-valor");
-            const bonusText = document.getElementById("bonus-text");
+    if (docSnap.exists()) {
+      return docSnap.data().saldo;
+    } else {
+      alert("Usuário não encontrado.");
+      return 0;
+    }
+  }
 
-            let valorFinal = valor;
-            let bonus = 0;
+  // Função para atualizar o saldo no Firestore
+  async function atualizarSaldo(valor) {
+    const docRef = doc(db, "usuarios", userId);
+    const saldoAtual = await buscarSaldo();
+    const novoSaldo = saldoAtual + valor;
 
-            if (valor > 500) {
-                bonus = valor * 0.25; // Calcula 25% de bônus
-                valorFinal += bonus;
-                bonusText.style.display = "block"; // Mostra o aviso de bônus
-            } else {
-                bonusText.style.display = "none"; // Esconde o aviso se o valor for menor
-            }
+    await updateDoc(docRef, { saldo: novoSaldo });
+    alert(`Pagamento confirmado! Seu novo saldo é: ${novoSaldo.toFixed(2).replace('.', ',')} R$`);
+    window.location.href = "index.html";
+  }
 
-            receberElement.textContent = valorFinal.toFixed(2).replace('.', ',') + " R$";
-            confirmarValor.textContent = valorFinal.toFixed(2).replace('.', ',') + " R$";
-        }
+  // Função de confirmação de pagamento
+  async function confirmarPagamento() {
+    const montanteInput = document.getElementById("input-value").value.replace(",", ".");
+    const valor = parseFloat(montanteInput);
 
-        function confirmarPagamento() {
-            const montanteInput = document.getElementById("input-value").value.replace(",", ".");
-            const valor = parseFloat(montanteInput);
+    if (isNaN(valor) || valor <= 0) {
+      alert("Por favor, insira um valor válido!");
+      return;
+    }
 
-            if (isNaN(valor) || valor <= 0) {
-                alert("Por favor, insira um valor válido!");
-                return;
-            }
+    let valorFinal = valor;
 
-            let valorFinal = valor;
+    if (valor > 500) {
+      valorFinal += valor * 0.25; // Adiciona o bônus de 25%
+    }
 
-            if (valor > 500) {
-                valorFinal += valor * 0.25; // Adiciona o bônus de 25%
-            }
+    const confirmacao = confirm(`Você está prestes a adicionar ${valorFinal.toFixed(2).replace('.', ',')} R$. Deseja continuar?`);
+    if (!confirmacao) return;
 
-            const confirmacao = confirm(`Você está prestes a adicionar ${valorFinal.toFixed(2).replace('.', ',')} R$. Deseja continuar?`);
-            if (!confirmacao) return;
-
-            saldoAtual += valorFinal;
-            localStorage.setItem("saldo", saldoAtual.toFixed(2));
-
-            alert(`Pagamento confirmado! Seu novo saldo é: ${saldoAtual.toFixed(2).replace('.', ',')} R$`);
-            window.location.href = "index.html";
-        }
-
-        document.getElementById("input-value").addEventListener("input", (event) => {
-            const valor = parseFloat(event.target.value.replace(",", "."));
-            if (!isNaN(valor)) calcularReceber(valor);
-        });
-    </script>
+    await atualizarSaldo(valorFinal);
+  }
+</script>
 </body>
 </html>
