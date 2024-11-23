@@ -19,6 +19,32 @@
             background-color: #1a1a2e;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
+
+        /* Estilo para o botão Rank */
+        .rank-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #242438;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .rank-button:hover {
+            background-color: #444;
+        }
+
+        .rank-button .emoji {
+            margin-right: 10px;
+        }
+
         .saldo-container {
             display: flex;
             align-items: center;
@@ -57,6 +83,12 @@
     </style>
 </head>
 <body>
+    <!-- Botão Rank no canto superior esquerdo -->
+    <div class="rank-button" onclick="irParaRank()">
+        <span class="emoji">👑</span>
+        Rank
+    </div>
+
     <div class="header">
         <div class="saldo-container" onclick="irParaAdicionarSaldo()">
             <div class="saldo-icon">R$</div>
@@ -91,6 +123,11 @@
         // Navegar para a página de adicionar saldo
         function irParaAdicionarSaldo() {
             window.location.href = "adicionar-saldo.html";
+        }
+
+        // Função para ir para o Rank
+        function irParaRank() {
+            window.location.href = "rank.html"; // Altere para o caminho correto do seu rank
         }
 
         // Atualizar o saldo ao carregar a página
