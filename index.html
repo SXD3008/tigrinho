@@ -20,11 +20,10 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        /* Estilo para o botão Rank */
-        .rank-button {
+        /* Botões de Navegação */
+        .rank-button, .inventario-button {
             position: absolute;
             top: 20px;
-            left: 20px;
             background-color: #242438;
             color: white;
             padding: 10px 20px;
@@ -37,12 +36,16 @@
             transition: background-color 0.3s ease;
         }
 
-        .rank-button:hover {
+        .rank-button:hover, .inventario-button:hover {
             background-color: #444;
         }
 
-        .rank-button .emoji {
-            margin-right: 10px;
+        .rank-button {
+            left: 20px;
+        }
+
+        .inventario-button {
+            left: 120px;
         }
 
         .saldo-container {
@@ -80,13 +83,65 @@
             font-size: 20px;
             color: #00ff99;
         }
+
+        .caixa-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .caixa {
+            margin: 10px;
+            width: 250px;
+            text-align: center;
+            background-color: #242438;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .caixa img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .caixa strong {
+            display: block;
+            margin: 10px 0;
+            font-size: 18px;
+            color: #00ff99;
+        }
+
+        .caixa button {
+            background-color: #ff9800;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .caixa button:hover {
+            background-color: #ffa726;
+        }
     </style>
 </head>
 <body>
-    <!-- Botão Rank no canto superior esquerdo -->
+    <!-- Botões de Navegação -->
     <div class="rank-button" onclick="irParaRank()">
         <span class="emoji">👑</span>
         Rank
+    </div>
+
+    <div class="inventario-button" onclick="irParaInventario()">
+        <span class="emoji">🎒</span>
+        Inventário
     </div>
 
     <div class="header">
@@ -99,38 +154,136 @@
         </div>
     </div>
 
+    <!-- Exibição das Caixas -->
+    <div class="caixa-container">
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Gallery Caixa">
+            <strong>Gallery Caixa - 500,00 R$</strong>
+            <button onclick="comprarCaixa(500, 'Gallery Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Kilowatt Caixa">
+            <strong>Kilowatt Caixa - 600,00 R$</strong>
+            <button onclick="comprarCaixa(600, 'Kilowatt Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Dreams & Nightmares Caixa">
+            <strong>Dreams & Nightmares Caixa - 700,00 R$</strong>
+            <button onclick="comprarCaixa(700, 'Dreams & Nightmares Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Fracture Caixa">
+            <strong>Fracture Caixa - 400,00 R$</strong>
+            <button onclick="comprarCaixa(400, 'Fracture Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Recoil Caixa">
+            <strong>Recoil Caixa - 450,00 R$</strong>
+            <button onclick="comprarCaixa(450, 'Recoil Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Revolution Caixa">
+            <strong>Revolution Caixa - 550,00 R$</strong>
+            <button onclick="comprarCaixa(550, 'Revolution Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Chroma Caixa">
+            <strong>Chroma Caixa - 600,00 R$</strong>
+            <button onclick="comprarCaixa(600, 'Chroma Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Chroma 2 Caixa">
+            <strong>Chroma 2 Caixa - 650,00 R$</strong>
+            <button onclick="comprarCaixa(650, 'Chroma 2 Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Chroma 3 Caixa">
+            <strong>Chroma 3 Caixa - 700,00 R$</strong>
+            <button onclick="comprarCaixa(700, 'Chroma 3 Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Clutch Caixa">
+            <strong>Clutch Caixa - 500,00 R$</strong>
+            <button onclick="comprarCaixa(500, 'Clutch Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="CGO Weapon Caixa">
+            <strong>CGO Weapon Caixa - 450,00 R$</strong>
+            <button onclick="comprarCaixa(450, 'CGO Weapon Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="CGO Weapon Caixa 2">
+            <strong>CGO Weapon Caixa 2 - 500,00 R$</strong>
+            <button onclick="comprarCaixa(500, 'CGO Weapon Caixa 2')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="CGO Weapon Caixa 3">
+            <strong>CGO Weapon Caixa 3 - 550,00 R$</strong>
+            <button onclick="comprarCaixa(550, 'CGO Weapon Caixa 3')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="CSS20 Case">
+            <strong>CSS20 Case - 600,00 R$</strong>
+            <button onclick="comprarCaixa(600, 'CSS20 Case')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="Danger Zone Caixa">
+            <strong>Danger Zone Caixa - 650,00 R$</strong>
+            <button onclick="comprarCaixa(650, 'Danger Zone Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="zKaita Caixa">
+            <strong>zKaita Caixa - 700,00 R$</strong>
+            <button onclick="comprarCaixa(700, 'zKaita Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="zKaita 2013 Winter Caixa">
+            <strong>zKaita 2013 Winter Caixa - 800,00 R$</strong>
+            <button onclick="comprarCaixa(800, 'zKaita 2013 Winter Caixa')">Comprar</button>
+        </div>
+        <div class="caixa">
+            <img src="https://example.com/case-image.png" alt="zKaita 2014 Summer Caixa">
+            <strong>zKaita 2014 Summer Caixa - 850,00 R$</strong>
+            <button onclick="comprarCaixa(850, 'zKaita 2014 Summer Caixa')">Comprar</button>
+        </div>
+
+        <!-- Continue a adicionar as caixas restantes -->
+    </div>
+
     <script>
-        // Recuperar saldo do LocalStorage ou inicializar com zero
         let saldoAtual = parseFloat(localStorage.getItem("saldo") || "0");
+        let inventario = JSON.parse(localStorage.getItem("inventario") || "[]");
 
-        // Formatar número no estilo brasileiro
-        function formatarNumero(valor) {
-            return valor.toFixed(2).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
-
-        // Atualizar o saldo exibido no HTML
         function atualizarSaldoDisplay() {
             const saldoDisplay = document.getElementById("saldo-display");
-            saldoDisplay.textContent = `${formatarNumero(saldoAtual)} R$`;
-
-            // Animação de mudança no saldo
-            saldoDisplay.style.transform = "scale(1.2)";
-            setTimeout(() => {
-                saldoDisplay.style.transform = "scale(1)";
-            }, 200);
+            saldoDisplay.textContent = `${saldoAtual.toFixed(2).replace(".", ",")} R$`;
         }
 
-        // Navegar para a página de adicionar saldo
+        function comprarCaixa(preco, descricao) {
+            if (saldoAtual >= preco) {
+                saldoAtual -= preco;
+                inventario.push(descricao);
+                localStorage.setItem("saldo", saldoAtual.toFixed(2));
+                localStorage.setItem("inventario", JSON.stringify(inventario));
+                alert(`Você comprou uma ${descricao}!`);
+                atualizarSaldoDisplay();
+            } else {
+                alert("Saldo insuficiente para comprar esta caixa!");
+            }
+        }
+
+        function irParaRank() {
+            window.location.href = "rank.html";
+        }
+
+        function irParaInventario() {
+            window.location.href = "inventario.html";
+        }
+
         function irParaAdicionarSaldo() {
             window.location.href = "adicionar-saldo.html";
         }
 
-        // Função para ir para o Rank
-        function irParaRank() {
-            window.location.href = "rank.html"; // Altere para o caminho correto do seu rank
-        }
-
-        // Atualizar o saldo ao carregar a página
         atualizarSaldoDisplay();
     </script>
 </body>
