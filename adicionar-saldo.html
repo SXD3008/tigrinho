@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Saldo</title>
     <style>
-        body {
+        html, body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
-            color: white;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
             display: flex;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            background: #000;
         }
 
         .container {
@@ -95,21 +96,68 @@
             outline: none;
         }
 
-        .pay-button {
+        .glow-on-hover {
             width: 100%;
             padding: 15px;
-            background-color: #ff9800;
-            color: white;
-            border: none;
+            color: #fff;
+            background: #111;
+            cursor: pointer;
+            position: relative;
+            z-index: 0;
             border-radius: 5px;
+            text-transform: uppercase;
             font-size: 18px;
             font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
+            border: none;
+            text-align: center;
+            display: inline-block;
         }
 
-        .pay-button:hover {
-            background-color: #ffa726;
+        .glow-on-hover:before {
+            content: '';
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(5px);
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            animation: glowing 20s linear infinite;
+            opacity: 0;
+            transition: opacity .3s ease-in-out;
+            border-radius: 10px;
+        }
+
+        .glow-on-hover:active {
+            color: #000;
+        }
+
+        .glow-on-hover:active:after {
+            background: transparent;
+        }
+
+        .glow-on-hover:hover:before {
+            opacity: 1;
+        }
+
+        .glow-on-hover:after {
+            z-index: -1;
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #111;
+            left: 0;
+            top: 0;
+            border-radius: 10px;
+        }
+
+        @keyframes glowing {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
         }
 
         .bonus-text {
@@ -118,6 +166,57 @@
             text-align: center;
             margin-bottom: 10px;
             font-weight: bold;
+        }
+
+        /* New section for changing nickname */
+        .nickname-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nickname-input {
+            width: 60%;
+            padding: 10px;
+            background-color: #333;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+        }
+
+        .change-nickname-button {
+            width: 35%;
+            padding: 10px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .change-nickname-button:hover {
+            background-color: #ffa726;
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -147,12 +246,34 @@
             </div>
         </div>
 
-        <button class="pay-button" onclick="confirmarPagamento()">Pagar <span id="confirmar-valor">0,00 R$</span></button>
+        <button class="glow-on-hover" onclick="confirmarPagamento()">Pagar <span id="confirmar-valor">0,00 R$</span></button>
+
+        <!-- Nickname Section -->
+        <div class="nickname-container">
+            <input type="text" id="nickname-input" class="nickname-input" placeholder="Digite seu novo nickname">
+            <button class="change-nickname-button" onclick="alterarNickname()">Alterar Nickname (100,00 R$)</button>
+        </div>
+
+        <!-- Back Button -->
+        <button class="back-button" onclick="voltarAoIndex()">Voltar ao Index</button>
     </div>
 
     <script>
         let saldoAtual = parseFloat(localStorage.getItem("saldo")) || 0;
+        let nickname = localStorage.getItem("nickname") || "";
 
+        // Função para formatar o número do saldo
+        function formatarNumero(valor) {
+            return valor.toFixed(2).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Atualizar o saldo exibido no HTML
+        function atualizarSaldoDisplay() {
+            const saldoDisplay = document.getElementById("saldo-display");
+            saldoDisplay.textContent = `${formatarNumero(saldoAtual)} R$`;
+        }
+
+        // Função para adicionar saldo
         function adicionarSaldo(valor) {
             const montanteInput = document.getElementById("input-value");
             montanteInput.value = valor.toFixed(2).replace('.', ',') + " R$";
@@ -179,6 +300,7 @@
             confirmarValor.textContent = valorFinal.toFixed(2).replace('.', ',') + " R$";
         }
 
+        // Confirma pagamento
         function confirmarPagamento() {
             const montanteInput = document.getElementById("input-value").value.replace(",", ".");
             const valor = parseFloat(montanteInput);
@@ -207,6 +329,34 @@
             window.location.href = "index.html";
         }
 
+        // Função para alterar o nickname
+        function alterarNickname() {
+            const nicknameInput = document.getElementById("nickname-input").value.trim();
+
+            if (nicknameInput === "") {
+                alert("Por favor, insira um nickname válido!");
+                return;
+            }
+
+            // Verifica se o saldo é suficiente para alterar o nickname
+            if (saldoAtual >= 100) {
+                // Deduz o valor do saldo
+                saldoAtual -= 100;
+                localStorage.setItem("saldo", saldoAtual.toFixed(2));
+                localStorage.setItem("nickname", nicknameInput);
+
+                alert("Nickname alterado com sucesso!");
+                window.location.reload();
+            } else {
+                alert("Saldo insuficiente para alterar o nickname!");
+            }
+        }
+
+        // Função para voltar ao index
+        function voltarAoIndex() {
+            window.location.href = "index.html";
+        }
+
         // Atualiza o valor automaticamente ao preencher o campo personalizado
         document.getElementById("input-value").addEventListener("input", (event) => {
             const valor = parseFloat(event.target.value.replace(",", "."));
@@ -214,6 +364,9 @@
                 calcularReceber(valor);
             }
         });
+
+        // Atualiza o saldo e o nickname ao carregar a página
+        atualizarSaldoDisplay();
     </script>
 </body>
 </html>
