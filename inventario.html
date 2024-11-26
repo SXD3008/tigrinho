@@ -1,1 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0c0c0f;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            width: 100%;
+            background-color: #1a1a2e;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .inventario-container {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .slot {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slot span {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .abrir-caixa-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+
+        .abrir-caixa-button:hover {
+            background-color: #ffa726;
+        }
+
+        .caixa-aberta-container {
+            margin-top: 30px;
+            width: 90%;
+            max-width: 600px;
+            overflow: hidden;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            background-color: #1a1a2e;
+        }
+
+        .caixa-animacao {
+            display: flex;
+            flex-wrap: nowrap;
+            animation: girar 5s linear infinite;
+        }
+
+        .item {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: #fff;
+        }
+
+        @keyframes girar {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-4800px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Inventário</h1>
+        <button onclick="voltar()">Voltar</button>
+    </div>
+
+    <div class="inventario-container" id="inventario-container"></div>
+
+    <button class="abrir-caixa-button" onclick="abrirCaixa()">Abrir Caixa</button>
+
+    <div class="caixa-aberta-container" id="caixa-aberta-container" style="display: none;">
+        <div class="caixa-animacao" id="caixa-animacao"></div>
+    </div>
+
+    <script>
+        const inventario = JSON.parse(localStorage.getItem("inventario") || "[]");
+        const inventarioContainer = document.getElementById("inventario-container");
+        const caixaAbertaContainer = document.getElementById("caixa-aberta-container");
+        const caixaAnimacao = document.getElementById("caixa-animacao");
+
+        const emojisComRaridade = [
+            { emoji: "😀", raridade: "comum" },
+            { emoji: "😃", raridade: "comum" },
+            { emoji: "😄", raridade: "comum" },
+            { emoji: "😁", raridade: "comum" },
+            { emoji: "😆", raridade: "comum" },
+            { emoji: "😅", raridade: "comum" },
+            { emoji: "🤣", raridade: "lendario" },
+            { emoji: "😂", raridade: "extremamente-raro" },
+            { emoji: "🙂", raridade: "comum" },
+            { emoji: "🙃", raridade: "incomum" },
+            { emoji: "🫠", raridade: "incomum" },
+            // Continue a adicionar todos os emojis e suas raridades
+        ];
+
+        function carregarInventario() {
+            for (let i = 0; i < 30; i++) {
+                const slot = document.createElement("div");
+                slot.classList.add("slot");
+                slot.innerHTML = inventario[i] || "<span>Vazio</span>";
+                inventarioContainer.appendChild(slot);
+            }
+        }
+
+        function voltar() {
+            window.location.href = "index.html";
+        }
+
+        function abrirCaixa() {
+            // Verifica se existe qualquer caixa no inventário (não importa qual)
+            const caixas = inventario.filter(item => item.includes("Caixa"));
+            if (caixas.length === 0) {
+                alert("Você não tem caixas para abrir!");
+                return;
+            }
+
+            // Remove a primeira caixa encontrada do inventário
+            inventario.splice(inventario.indexOf(caixas[0]), 1);
+            localStorage.setItem("inventario", JSON.stringify(inventario));
+            inventarioContainer.innerHTML = ""; // Limpar slots para recarregar
+            carregarInventario();
+
+            // Exibir animação de abertura
+            caixaAbertaContainer.style.display = "block";
+
+            // Preencher a animação com emojis
+            caixaAnimacao.innerHTML = "";
+            for (let i = 0; i < 20; i++) { // Colocando mais emojis na animação
+                const item = document.createElement("div");
+                item.classList.add("item");
+                const emoji = emojisComRaridade[Math.floor(Math.random() * emojisComRaridade.length)];
+                item.textContent = emoji.emoji;
+                caixaAnimacao.appendChild(item);
+            }
+
+            // Parar a animação após 5 segundos e exibir o prêmio
+            setTimeout(() => {
+                caixaAbertaContainer.style.display = "none";
+                const premioIndex = Math.floor(Math.random() * emojisComRaridade.length);
+                const premio = emojisComRaridade[premioIndex];
+                inventario.push(`${premio.emoji} (${premio.raridade})`);
+                localStorage.setItem("inventario", JSON.stringify(inventario));
+                alert(`Parabéns! Você ganhou: ${premio.emoji} (${premio.raridade})`);
+                inventarioContainer.innerHTML = ""; // Recarregar inventário
+                carregarInventario();
+            }, 5000);
+        }
+
+        carregarInventario();
+    </script>
+</body>
+</html>
 
